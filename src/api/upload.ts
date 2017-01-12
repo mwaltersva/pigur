@@ -1,7 +1,5 @@
 import {Application, Request, Response, NextFunction} from 'express';
 import * as Promise from 'bluebird';
-import * as fs from 'fs';
-import * as jimp from 'jimp';
 import * as gm from 'gm';
 import * as fs from 'fs';
 
