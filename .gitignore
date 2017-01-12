@@ -14,3 +14,4 @@ static/images/*
 static/images/thumbs/*
 db/*
 src/**/*.map
+*.map
