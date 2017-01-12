@@ -13,3 +13,4 @@ src/**/*.js
 static/images/*
 static/images/thumbs/*
 db/*
+src/**/*.map
