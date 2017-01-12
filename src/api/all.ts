@@ -6,12 +6,21 @@ export function allEndpoint(app: Application) {
     function get(req: Request, res: Response) {
         images
             .findAll({
+                limit: req.query.limit || undefined,
+                offset: req.query.offset || undefined,
                 order: [
                     ['id', 'DESC']
                 ]
             })
             .then(resultSet => {
-                return res.json(resultSet)
+                images
+                    .count()
+                    .then(total => {
+                        return res.json({
+                            images: resultSet,
+                            totalRecords: total
+                        });
+                    });
             });
     }
 
