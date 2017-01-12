@@ -2,6 +2,8 @@ import {Application, Request, Response, NextFunction} from 'express';
 import * as Promise from 'bluebird';
 import * as fs from 'fs';
 import * as jimp from 'jimp';
+import * as gm from 'gm';
+import * as fs from 'fs';
 
 let rn = Promise.promisify(fs.rename);
 
@@ -18,7 +20,6 @@ export function uploadEndpoint(app) {
         }
 
         const newName = req.file.filename + '.' + req.file.originalname.split('.').pop().toLowerCase();
-        let resultSetCache = null;
 
         rn(`static/images/${req.file.filename}`, `static/images/${newName}`)
             .then(() => {
@@ -29,22 +30,24 @@ export function uploadEndpoint(app) {
                     })
             })
             .then(resultSet => {
-                resultSetCache = resultSet;
-            })
-            .then(() => {
-                return jimp
-                    .read(`static/images/${newName}`)
-            })
-            .then(img => {
-                img
-                    .resize(150, jimp.AUTO)
-                    .quality(60)
-                    .write(`static/images/thumbs/${newName}`);
-            })
-            .then(() => {
-                return res.json(resultSetCache);
+                gm(`static/images/${newName}`)
+                    .resize(150, null)
+                    .write(`static/images/thumbs/${newName}`, (err) => {
+                        if (err) {
+                            return resizeErrorHandler(res, err);
+                        } else {
+                            return res.json(resultSet);
+                        }
+                    });
             });
     }
 
     return post;
+}
+
+function resizeErrorHandler(res, err) {
+    return res.send({
+        success: false,
+        message: 'There was an error resizing the image: ' + err
+    });
 }
