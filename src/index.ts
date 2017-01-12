@@ -6,10 +6,12 @@ import * as Sequelize from 'sequelize';
 import {db} from './lib/db';
 import * as endpoints from './api';
 import * as multer from 'multer';
+import * as compression from 'compression';
 
 const app = express();
 const upload = multer({dest: 'static/images/'});
 
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({extended: true}));
