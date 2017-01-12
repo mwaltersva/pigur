@@ -30,6 +30,7 @@ export function uploadEndpoint(app) {
             .then(resultSet => {
                 gm(`static/images/${newName}`)
                     .resize(150, null)
+                    .quality(50)
                     .write(`static/images/thumbs/${newName}`, (err) => {
                         if (err) {
                             return resizeErrorHandler(res, err);
